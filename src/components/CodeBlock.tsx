@@ -8,6 +8,11 @@ interface CodeBlockProps {
   description?: string;
 }
 
+interface Token {
+  type: 'keyword' | 'flag' | 'string' | 'branch' | 'comment' | 'text';
+  value: string;
+}
+
 export function CodeBlock({ code, language = "bash", description }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
@@ -17,31 +22,74 @@ export function CodeBlock({ code, language = "bash", description }: CodeBlockPro
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Simple syntax highlighting for common patterns
-  const highlightCode = (code: string) => {
-    return code
-      .split('\n')
-      .map((line, i) => {
-        // Comments
-        if (line.trim().startsWith('#')) {
-          return <span key={i} className="text-muted-foreground">{line}</span>;
-        }
-        
-        // Keywords
-        let highlighted = line
-          .replace(/(git|npm|brew|sudo|ssh|eval|cat|mkdir|cd|xcode-select)/g, '<span class="text-primary">$1</span>')
-          .replace(/(-[a-zA-Z]+)/g, '<span class="text-github-orange">$1</span>')
-          .replace(/(origin|main|HEAD|master)/g, '<span class="text-accent">$1</span>')
-          .replace(/(".*?")/g, '<span class="text-green-400">$1</span>');
-        
-        return <span key={i} dangerouslySetInnerHTML={{ __html: highlighted }} />;
-      })
-      .reduce((acc: React.ReactNode[], line, i, arr) => {
-        acc.push(line);
-        if (i < arr.length - 1) acc.push('\n');
-        return acc;
-      }, []);
+  const tokenizeLine = (line: string): Token[] => {
+    // If it's a comment, return the whole line as comment
+    if (line.trim().startsWith('#')) {
+      return [{ type: 'comment', value: line }];
+    }
+
+    const tokens: Token[] = [];
+    const keywords = ['git', 'npm', 'brew', 'sudo', 'ssh', 'eval', 'cat', 'mkdir', 'cd', 'xcode-select', 'ssh-keygen', 'ssh-add'];
+    const branches = ['origin', 'main', 'HEAD', 'master', 'develop'];
+    
+    // Split by spaces but keep strings together
+    const parts = line.match(/("[^"]*")|('[^']*')|(\S+)/g) || [];
+    
+    parts.forEach((part, index) => {
+      if (index > 0) {
+        tokens.push({ type: 'text', value: ' ' });
+      }
+      
+      // Check if it's a string
+      if ((part.startsWith('"') && part.endsWith('"')) || (part.startsWith("'") && part.endsWith("'"))) {
+        tokens.push({ type: 'string', value: part });
+      }
+      // Check if it's a flag
+      else if (part.startsWith('-') || part.startsWith('--')) {
+        tokens.push({ type: 'flag', value: part });
+      }
+      // Check if it's a keyword
+      else if (keywords.includes(part)) {
+        tokens.push({ type: 'keyword', value: part });
+      }
+      // Check if it's a branch name
+      else if (branches.includes(part)) {
+        tokens.push({ type: 'branch', value: part });
+      }
+      // Regular text
+      else {
+        tokens.push({ type: 'text', value: part });
+      }
+    });
+
+    return tokens;
   };
+
+  const getTokenClass = (type: Token['type']): string => {
+    switch (type) {
+      case 'keyword': return 'text-primary font-semibold';
+      case 'flag': return 'text-github-orange';
+      case 'string': return 'text-green-400';
+      case 'branch': return 'text-accent';
+      case 'comment': return 'text-muted-foreground italic';
+      default: return 'text-foreground/90';
+    }
+  };
+
+  const renderLine = (line: string, lineIndex: number) => {
+    const tokens = tokenizeLine(line);
+    return (
+      <span key={lineIndex}>
+        {tokens.map((token, i) => (
+          <span key={i} className={getTokenClass(token.type)}>
+            {token.value}
+          </span>
+        ))}
+      </span>
+    );
+  };
+
+  const lines = code.split('\n');
 
   return (
     <div className="group relative my-4">
@@ -91,7 +139,14 @@ export function CodeBlock({ code, language = "bash", description }: CodeBlockPro
         {/* Terminal Content */}
         <div className="p-4 overflow-x-auto scrollbar-thin">
           <pre className="text-sm leading-relaxed font-mono">
-            <code>{highlightCode(code)}</code>
+            <code>
+              {lines.map((line, i) => (
+                <span key={i}>
+                  {renderLine(line, i)}
+                  {i < lines.length - 1 && '\n'}
+                </span>
+              ))}
+            </code>
           </pre>
         </div>
       </div>
