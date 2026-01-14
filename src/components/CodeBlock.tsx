@@ -48,23 +48,52 @@ export function CodeBlock({ code, language = "bash", description }: CodeBlockPro
       {description && (
         <p className="text-sm text-muted-foreground mb-2 italic">{description}</p>
       )}
-      <div className="code-block relative">
-        <div className="absolute top-2 right-2 flex items-center gap-2">
-          <span className="text-xs text-muted-foreground uppercase">{language}</span>
+      
+      {/* Terminal Window */}
+      <div className="rounded-lg overflow-hidden border border-border bg-[hsl(220,20%,8%)] shadow-xl">
+        {/* Terminal Header */}
+        <div className="flex items-center justify-between px-4 py-2.5 bg-[hsl(220,18%,12%)] border-b border-border">
+          {/* Window Controls */}
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+            <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+            <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+          </div>
+          
+          {/* Title */}
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="font-mono uppercase">{language}</span>
+          </div>
+          
+          {/* Copy Button */}
           <button
             onClick={handleCopy}
             className={cn(
-              "p-1.5 rounded-md transition-all",
-              "bg-secondary/50 hover:bg-secondary",
-              copied && "bg-primary/20 text-primary"
+              "flex items-center gap-1.5 px-2 py-1 rounded text-xs transition-all",
+              "hover:bg-secondary/50",
+              copied ? "text-primary" : "text-muted-foreground hover:text-foreground"
             )}
           >
-            {copied ? <Check size={14} /> : <Copy size={14} />}
+            {copied ? (
+              <>
+                <Check size={12} />
+                <span>Copié!</span>
+              </>
+            ) : (
+              <>
+                <Copy size={12} />
+                <span>Copier</span>
+              </>
+            )}
           </button>
         </div>
-        <pre className="text-sm leading-relaxed overflow-x-auto">
-          <code>{highlightCode(code)}</code>
-        </pre>
+        
+        {/* Terminal Content */}
+        <div className="p-4 overflow-x-auto scrollbar-thin">
+          <pre className="text-sm leading-relaxed font-mono">
+            <code>{highlightCode(code)}</code>
+          </pre>
+        </div>
       </div>
     </div>
   );
