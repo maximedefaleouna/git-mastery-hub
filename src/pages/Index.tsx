@@ -1,12 +1,51 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { Sidebar } from "@/components/Sidebar";
+import { ChapterContent } from "@/components/ChapterContent";
+import { ProgressBar } from "@/components/ProgressBar";
+import { chapters } from "@/data/chapters";
 
 const Index = () => {
+  const [activeChapter, setActiveChapter] = useState(chapters[0].id);
+  
+  const currentChapter = chapters.find(c => c.id === activeChapter)!;
+  const currentIndex = chapters.findIndex(c => c.id === activeChapter);
+  
+  const handleNextChapter = () => {
+    if (currentIndex < chapters.length - 1) {
+      setActiveChapter(chapters[currentIndex + 1].id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrevChapter = () => {
+    if (currentIndex > 0) {
+      setActiveChapter(chapters[currentIndex - 1].id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleChapterChange = (chapterId: string) => {
+    setActiveChapter(chapterId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <ProgressBar activeChapter={activeChapter} />
+      <Sidebar activeChapter={activeChapter} onChapterChange={handleChapterChange} />
+      
+      {/* Main Content */}
+      <main className="lg:ml-[280px] min-h-screen">
+        <div className="max-w-4xl mx-auto px-6 py-16 lg:px-12">
+          <ChapterContent 
+            chapter={currentChapter}
+            onNextChapter={handleNextChapter}
+            onPrevChapter={handlePrevChapter}
+            hasNext={currentIndex < chapters.length - 1}
+            hasPrev={currentIndex > 0}
+          />
+        </div>
+      </main>
     </div>
   );
 };
