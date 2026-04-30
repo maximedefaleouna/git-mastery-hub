@@ -1,3 +1,10 @@
+import githubImg from "@/assets/github.png";
+import GitImg from "@/assets/gitM.webp";
+import BrancheImg from "@/assets/branche.webp";
+import conflitImg from "@/assets/conflit.png";
+import actionImg from "@/assets/actions.webp";
+import pullIMg from "@/assets/pull.png";
+
 export interface Chapter {
   id: string;
   number: number;
@@ -5,6 +12,7 @@ export interface Chapter {
   description: string;
   icon: string;
   sections: Section[];
+  image?: string;
 }
 
 export interface Section {
@@ -25,7 +33,9 @@ export const chapters: Chapter[] = [
     id: "introduction",
     number: 1,
     title: "Introduction à Git",
-    description: "Comprendre le contrôle de version et pourquoi Git est essentiel",
+    image: GitImg,
+    description:
+      "Comprendre le contrôle de version et pourquoi Git est essentiel",
     icon: "BookOpen",
     sections: [
       {
@@ -33,128 +43,453 @@ export const chapters: Chapter[] = [
         title: "Qu'est-ce que Git ?",
         content: `Git est un **système de contrôle de version distribué** créé par Linus Torvalds en 2005. Il permet de suivre les modifications apportées aux fichiers et de coordonner le travail entre plusieurs personnes.
 
-### Pourquoi utiliser Git ?
+  ### Pourquoi utiliser Git ?
 
-- **Historique complet** : Chaque modification est enregistrée avec son auteur et sa date
-- **Travail en équipe** : Plusieurs développeurs peuvent travailler simultanément
-- **Branches** : Expérimenter sans affecter le code principal
-- **Sauvegarde** : Votre code est sécurisé et récupérable
+  - **Historique complet** : Chaque modification est enregistrée avec son auteur et sa date
+  - **Travail en équipe** : Plusieurs développeurs peuvent travailler simultanément
+  - **Branches** : Expérimenter sans affecter le code principal
+  - **Sauvegarde** : Votre code est sécurisé et récupérable
 
-### Git vs GitHub
+  ### Git vs GitHub
 
-- **Git** est l'outil de contrôle de version (local)
-- **GitHub** est une plateforme d'hébergement pour les dépôts Git (cloud)`
+  - **Git** est l'outil de contrôle de version (local)
+  - **GitHub** est une plateforme d'hébergement pour les dépôts Git (cloud)`,
       },
       {
         id: "how-git-works",
         title: "Comment fonctionne Git ?",
         content: `Git fonctionne avec trois zones principales :
 
-### Les trois états
+  ### Les trois états
 
-1. **Working Directory** (Répertoire de travail)
-   - Vos fichiers actuels sur le disque
-   
-2. **Staging Area** (Zone de transit)
-   - Les fichiers prêts à être commités
-   
-3. **Repository** (Dépôt)
-   - L'historique complet de votre projet
+  1. **Working Directory** (Répertoire de travail)
+     - Vos fichiers actuels sur le disque
 
-### Le flux de travail Git
+  2. **Staging Area** (Zone de transit)
+     - Les fichiers prêts à être commités
 
-\`\`\`
-Modifier → Ajouter (stage) → Commiter → Pousser
-\`\`\`
+  3. **Repository** (Dépôt)
+     - L'historique complet de votre projet
 
-Ce cycle se répète pour chaque ensemble de modifications que vous souhaitez sauvegarder.`
-      }
-    ]
+  ### Le flux de travail Git
+
+  
+  Modifier → Ajouter (stage) → Commiter → Pousser
+  
+
+  Ce cycle se répète pour chaque ensemble de modifications que vous souhaitez sauvegarder.`,
+      },
+    ],
   },
   {
     id: "installation",
     number: 2,
     title: "Installation et Configuration",
-    description: "Installer Git et configurer votre environnement",
+    description:
+      "Installer Git et configurer votre environnement de développement",
     icon: "Download",
     sections: [
       {
-        id: "install-git",
-        title: "Installer Git",
-        content: `### Windows
+        id: "overview-installation",
+        title: "Vue d'ensemble de l'installation",
+        content: `Avant de commencer à utiliser Git, vous devez l'installer sur votre système. Git est disponible pour tous les principaux systèmes d'exploitation.
 
-Téléchargez l'installateur depuis le site officiel et suivez les instructions.`,
+### Systèmes d'exploitation supportés
+
+- **Windows** : Toutes versions récentes (7, 8, 10, 11)
+- **macOS** : macOS 10.9 ou supérieur
+- **Linux** : Toutes distributions principales (Ubuntu, Debian, Fedora, Arch, etc.)
+
+### Vérifier si Git est déjà installé
+
+Ouvrez votre terminal (Command Prompt, PowerShell, Terminal, ou iTerm) et tapez :`,
         code: [
           {
             language: "bash",
-            code: "# Vérifier l'installation\ngit --version",
-            description: "Après installation, vérifiez que Git est bien installé"
-          }
-        ]
+            code: "git --version",
+            description: "Vérifier la version de Git installée",
+          },
+        ],
       },
       {
-        id: "install-macos",
+        id: "windows-installation",
+        title: "Installation sur Windows",
+        content: `### Méthode 1 : Installateur officiel (recommandé)
+
+1. **Télécharger l'installateur** depuis le site officiel :
+   - https://git-scm.com/download/win
+
+2. **Exécuter l'installateur** :
+   - Acceptez les termes de licence
+   - Sélectionnez les composants (gardez les options par défaut)
+   - Choisissez l'éditeur par défaut (Vim ou VS Code recommandé)
+   - Pour le terminal, choisissez "Use Git from Git Bash only"
+   - Configurez les fins de ligne : "Checkout Windows-style, commit Unix-style"
+   - Terminal : "Use MinTTY"
+   - Fonctions expérimentales : décochez les options
+
+3. **Valider l'installation** :
+   Ouvrez **Git Bash** depuis le menu Démarrer et vérifiez la version.
+
+### Méthode 2 : Winget (Windows Package Manager)
+
+Si vous avez Windows 10/11 avec Winget :`,
+        code: [
+          {
+            language: "bash",
+            code: "# Installer via Winget\nwinget install --id Git.Git -e --source winget\n\n# Vérifier l'installation\ngit --version",
+            description: "Installation rapide avec Winget (Windows moderne)",
+          },
+        ],
+      },
+      {
+        id: "windows-git-bash",
+        title: "Git Bash et configuration Windows",
+        content: `### Qu'est-ce que Git Bash ?
+
+Git Bash est un émulateur de terminal pour Windows qui fournit un environnement de type Unix, incluant les commandes bash les plus courantes.
+
+### Configurations importantes
+
+1. **Activer Git dans PowerShell/CMD** :
+   Lors de l'installation, choisissez "Git from the command line and also from 3rd-party software"
+
+2. **Conseils pour Windows** :
+   - Utilisez **Windows Terminal** (disponible sur Microsoft Store) pour une meilleure expérience
+   - Configurez **VS Code** comme éditeur par défaut
+
+3. **Dépannage Windows** :
+   - Problèmes de permissions : Exécutez Git Bash en tant qu'administrateur
+   - Caractères spéciaux : Utilisez UTF-8 dans les paramètres de terminal
+   - Chemins longs : Activez le support des chemins longs dans Windows`,
+        code: [
+          {
+            language: "bash",
+            code: '# Configurer VS Code comme éditeur\ngit config --global core.editor "code --wait"\n\n# Pour Notepad++ (si installé)\ngit config --global core.editor "\'C:/Program Files/Notepad++/notepad++.exe\' -multiInst -notabbar -nosession -noPlugin"\n\n# Vérifier les paramètres\ngit config --list',
+            description: "Configuration de l'éditeur sur Windows",
+          },
+        ],
+      },
+      {
+        id: "macos-installation",
         title: "Installation sur macOS",
-        content: `### macOS
+        content: `### Méthode 1 : Homebrew (recommandé pour développeurs)
 
-Git est souvent pré-installé. Sinon, utilisez Homebrew :`,
+Homebrew est un gestionnaire de paquets pour macOS. Installez-le d'abord si nécessaire.
+
+### Méthode 2 : Installateur officiel
+
+1. **Télécharger l'installateur** :
+   - https://git-scm.com/download/mac
+   
+2. **Ouvrir le fichier .dmg**
+3. **Suivre les instructions d'installation**
+
+### Méthode 3 : Xcode Command Line Tools
+
+Git est inclus avec les outils de ligne de commande Xcode :`,
         code: [
           {
             language: "bash",
-            code: "# Avec Homebrew\nbrew install git\n\n# Ou via Xcode Command Line Tools\nxcode-select --install",
-            description: "Deux méthodes pour installer Git sur macOS"
-          }
-        ]
-      },
-      {
-        id: "install-linux",
-        title: "Installation sur Linux",
-        content: `### Linux
-
-Utilisez le gestionnaire de paquets de votre distribution :`,
-        code: [
-          {
-            language: "bash",
-            code: "# Ubuntu/Debian\nsudo apt update\nsudo apt install git\n\n# Fedora\nsudo dnf install git\n\n# Arch Linux\nsudo pacman -S git",
-            description: "Installation selon votre distribution Linux"
-          }
-        ]
-      },
-      {
-        id: "configure-git",
-        title: "Configuration initiale",
-        content: `Avant de commencer, configurez votre identité Git. Ces informations seront attachées à chaque commit.`,
-        code: [
-          {
-            language: "bash",
-            code: `# Configurer votre nom
-git config --global user.name "Votre Nom"
-
-# Configurer votre email
-git config --global user.email "votre.email@example.com"
-
-# Vérifier la configuration
-git config --list`,
-            description: "Configuration de base obligatoire"
+            code: '# Installer Homebrew (si pas déjà installé)\n/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"\n\n# Installer Git avec Homebrew\nbrew install git\n\n# Mettre à jour Git\nbrew upgrade git',
+            description:
+              "Installation avec Homebrew (méthode la plus flexible)",
           },
           {
             language: "bash",
-            code: `# Définir l'éditeur par défaut (optionnel)
-git config --global core.editor "code --wait"  # VS Code
-git config --global core.editor "nano"          # Nano
-git config --global core.editor "vim"           # Vim
+            code: "# Installer les Xcode Command Line Tools (inclut Git)\nxcode-select --install\n\n# Accepter la licence (si nécessaire)\nsudo xcodebuild -license accept\n\n# Vérifier l'installation\ngit --version",
+            description: "Installation via Xcode Command Line Tools",
+          },
+        ],
+      },
+      {
+        id: "macos-tips",
+        title: "Conseils et configuration macOS",
+        content: `### Configuration optimale pour macOS
 
-# Activer les couleurs
-git config --global color.ui auto
+1. **Utiliser Git avec macOS** :
+   - Le terminal par défaut fonctionne bien avec Git
+   - Pour une meilleure expérience, utilisez **iTerm2** (https://iterm2.com)
+   - Configurez **Oh My Zsh** pour des fonctionnalités Git avancées
 
-# Définir la branche par défaut
-git config --global init.defaultBranch main`,
-            description: "Configurations optionnelles recommandées"
-          }
-        ]
-      }
-    ]
+2. **Mise à jour de Git** :
+   Si vous avez installé Git via Xcode, il peut être obsolète.
+
+3. **Problèmes courants macOS** :
+   - **Permissions** : Évitez d'utiliser sudo avec Git sauf nécessaire
+   - **Keychain** : Git peut utiliser le keychain macOS pour stocker les identifiants
+   - **Finder** : Activez l'affichage des fichiers cachés pour voir le dossier .git`,
+        code: [
+          {
+            language: "bash",
+            code: '# Installer Oh My Zsh (optionnel mais recommandé)\nsh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"\n\n# Recharger la configuration\nsource ~/.zshrc',
+            description: "Améliorer l'expérience Git avec Oh My Zsh",
+          },
+          {
+            language: "bash",
+            code: "# Mettre à jour Git (si installé via Xcode)\nbrew install git\n\n# Forcer l'utilisation de la version Homebrew\necho 'export PATH=\"/usr/local/bin:$PATH\"' >> ~/.zshrc\nsource ~/.zshrc\n\n# Vérifier le chemin\ntype -a git",
+            description: "Mettre à jour et utiliser la version Homebrew de Git",
+          },
+        ],
+      },
+      {
+        id: "linux-installation",
+        title: "Installation sur Linux",
+        content: `### Distribution spécifique
+
+Git est disponible dans les dépôts officiels de toutes les distributions Linux majeures.`,
+        code: [
+          {
+            language: "bash",
+            code: "# Ubuntu, Debian, Linux Mint\nsudo apt update\nsudo apt install git git-doc git-man gitk\n\n# Vérifier la version\ngit --version",
+            description: "Installation sur Debian/Ubuntu et dérivés",
+          },
+          {
+            language: "bash",
+            code: "# Fedora\nsudo dnf install git git-all\n\n# RHEL / CentOS 8+\nsudo yum install git\n\n# CentOS 7\nsudo yum install epel-release\nsudo yum install git",
+            description: "Installation sur Fedora/RHEL/CentOS",
+          },
+          {
+            language: "bash",
+            code: "# Arch Linux / Manjaro\nsudo pacman -S git\n\n# Vérifier\npacman -Qi git",
+            description: "Installation sur Arch Linux",
+          },
+          {
+            language: "bash",
+            code: "# openSUSE\nsudo zypper install git",
+            description: "Installation sur openSUSE",
+          },
+        ],
+      },
+      {
+        id: "configure-git",
+        title: "Configuration initiale de Git",
+        content: `### Configuration essentielle
+
+Après l'installation, configurez votre identité Git. Ces informations seront associées à chaque commit que vous effectuerez.
+
+### Paramètres recommandés
+
+1. **Identité** : Nom et email (reflète votre identité professionnelle)
+2. **Éditeur par défaut** : Votre éditeur de texte préféré
+3. **Configuration des fins de ligne** : Important pour la compatibilité multi-plateforme
+4. **Couleurs** : Activer les couleurs pour une meilleure lisibilité
+5. **Branche par défaut** : Configurez 'main' comme branche par défaut`,
+        code: [
+          {
+            language: "bash",
+            code: '# Configuration essentielle (OBLIGATOIRE)\ngit config --global user.name "Votre Nom"\ngit config --global user.email "votre.email@entreprise.com"\n\n# Pour les contributeurs open source\ngit config --global user.email "votre.nom@users.noreply.github.com"\n\n# Vérification\ngit config --global user.name\ngit config --global user.email',
+            description: "Configuration de base obligatoire",
+          },
+          {
+            language: "bash",
+            code: '# Configuration de l\'éditeur par défaut\n\n# Pour VS Code (recommandé)\ngit config --global core.editor "code --wait"\n\n# Pour Nano\ngit config --global core.editor "nano"\n\n# Pour Vim\ngit config --global core.editor "vim"\n\n# Pour Sublime Text (macOS)\ngit config --global core.editor "subl -n -w"\n\n# Pour Atom\ngit config --global core.editor "atom --wait"',
+            description: "Configuration de différents éditeurs",
+          },
+        ],
+      },
+      {
+        id: "advanced-configuration",
+        title: "Configuration avancée",
+        content: `### Paramètres recommandés
+
+Ces paramètres améliorent l'expérience Git et préviennent les erreurs courantes.
+
+### Configuration des fins de ligne
+
+Important pour travailler entre Windows et Unix. Configurez Git pour gérer automatiquement les fins de ligne :
+
+- **Windows** : checkout Windows-style, commit Unix-style
+- **macOS/Linux** : Pas de conversion
+
+### Autres paramètres utiles
+
+1. **Alias** : Créez des raccourcis pour les commandes fréquentes
+2. **Credential helper** : Gestionnaire d'identifiants`,
+        code: [
+          {
+            language: "bash",
+            code: "# Activer les couleurs\ngit config --global color.ui auto\ngit config --global color.branch auto\ngit config --global color.diff auto\ngit config --global color.status auto\n\n# Fins de ligne (Cross-platform)\n# Pour Windows\ngit config --global core.autocrlf true\n\n# Pour macOS/Linux\ngit config --global core.autocrlf input\n\n# Branche par défaut\ngit config --global init.defaultBranch main",
+            description: "Paramètres de configuration avancés",
+          },
+          {
+            language: "bash",
+            code: "# Alias utiles\ngit config --global alias.co checkout\ngit config --global alias.br branch\ngit config --global alias.ci commit\ngit config --global alias.st status\ngit config --global alias.unstage 'reset HEAD --'\ngit config --global alias.last 'log -1 HEAD'\ngit config --global alias.lg \"log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit\"\n\n# Pour voir tous les alias\ngit config --global alias.alias '!git config --get-regexp ^alias\\. | sed -e s/^alias\\.//'",
+            description: "Alias Git pour gagner du temps",
+          },
+        ],
+      },
+      {
+        id: "verify-installation",
+        title: "Vérifier et tester l'installation",
+        content: `### Tests de validation
+
+Après installation et configuration, vérifiez que tout fonctionne correctement.
+
+### Étapes de vérification
+
+1. **Version de Git** : Vérifiez la version installée
+2. **Configuration** : Vérifiez tous les paramètres
+3. **Premier dépôt** : Créez un dépôt test
+4. **Opérations de base** : Testez add, commit, status`,
+        code: [
+          {
+            language: "bash",
+            code: '# Vérifier l\'installation\ngit --version\n\n# Afficher toute la configuration\ngit config --list --show-origin\n\n# Tester Git avec un dépôt temporaire\nmkdir test-git && cd test-git\ngit init\necho "# Test Git" > README.md\ngit add README.md\ngit commit -m "Initial commit"\ngit status\ngit log --oneline\n\n# Nettoyer\ncd .. && rm -rf test-git',
+            description: "Tests complets de l'installation Git",
+          },
+        ],
+      },
+      {
+        id: "troubleshooting",
+        title: "Dépannage et FAQ",
+        content: `### Problèmes courants et solutions
+
+#### Git n'est pas reconnu comme commande
+- **Windows** : Redémarrer après installation ou vérifier le PATH
+- **macOS** : Vérifier que /usr/local/bin est dans le PATH
+- **Linux** : Vérifier l'installation avec le gestionnaire de paquets
+
+#### Problèmes de permissions
+- Évitez d'utiliser sudo avec Git
+- Vérifiez les permissions du dossier .gitconfig
+
+#### Problèmes de fins de ligne
+- Configurez correctement core.autocrlf
+- Utilisez .gitattributes pour les projets multi-plateformes
+
+### Ressources utiles
+- **Documentation officielle** : https://git-scm.com/doc
+- **Pro Git book** : https://git-scm.com/book
+- **Stack Overflow** : https://stackoverflow.com/questions/tagged/git
+- **GitHub Docs** : https://docs.github.com`,
+        code: [
+          {
+            language: "bash",
+            code: "# Résoudre les problèmes de PATH\n\n# macOS/Linux\necho 'export PATH=\"/usr/local/bin:$PATH\"' >> ~/.zshrc\nsource ~/.zshrc\n\n# Vérifier\nwhich git\n\n# Réparer les permissions\nsudo chown -R $(whoami) ~/.gitconfig\nsudo chown -R $(whoami) ~/.ssh",
+            description: "Résolution des problèmes courants",
+          },
+        ],
+      },
+      {
+        id: "next-steps",
+        title: "Prochaines étapes",
+        content: `### Vous êtes prêt à commencer !
+
+Maintenant que Git est installé et configuré, vous pouvez :
+
+1. **Créer votre premier dépôt** :
+   - Initialisez un nouveau projet
+   - Clonez un dépôt existant depuis GitHub
+
+2. **Apprendre les commandes de base** :
+   - git init : Créer un nouveau dépôt
+   - git clone : Copier un dépôt existant
+   - git status : Vérifier l'état
+   - git add : Ajouter des fichiers
+   - git commit : Sauvegarder les changements
+
+### Ressources pour continuer
+
+- **Tutoriel interactif** : https://try.github.io
+- **Jeu d'apprentissage** : https://ohmygit.org
+- **Cours gratuit** : https://gitimmersion.com
+- **Référence des commandes** : https://git-scm.com/docs
+
+### Conseils pour débutants
+
+- Commencez avec des projets personnels
+- Utilisez git status fréquemment
+- Faites des commits petits et fréquents
+- Ne paniquez pas si vous faites une erreur - Git a des commandes pour réparer presque tout !`,
+      },
+    ],
   },
+  //   {
+  //     id: "installation",
+  //     number: 2,
+  //     title: "Installation et Configuration",
+  //     description: "Installer Git et configurer votre environnement",
+  //     icon: "Download",
+  //     sections: [
+  //       {
+  //         id: "install-git",
+  //         title: "Installer Git",
+  //         content: `### Windows
+
+  // Téléchargez l'installateur depuis le site officiel et suivez les instructions.`,
+  //         code: [
+  //           {
+  //             language: "bash",
+  //             code: "# Vérifier l'installation\ngit --version",
+  //             description:
+  //               "Après installation, vérifiez que Git est bien installé",
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         id: "install-macos",
+  //         title: "Installation sur macOS",
+  //         content: `### macOS
+
+  // Git est souvent pré-installé. Sinon, utilisez Homebrew :`,
+  //         code: [
+  //           {
+  //             language: "bash",
+  //             code: "# Avec Homebrew\nbrew install git\n\n# Ou via Xcode Command Line Tools\nxcode-select --install",
+  //             description: "Deux méthodes pour installer Git sur macOS",
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         id: "install-linux",
+  //         title: "Installation sur Linux",
+  //         content: `### Linux
+
+  // Utilisez le gestionnaire de paquets de votre distribution :`,
+  //         code: [
+  //           {
+  //             language: "bash",
+  //             code: "# Ubuntu/Debian\nsudo apt update\nsudo apt install git\n\n# Fedora\nsudo dnf install git\n\n# Arch Linux\nsudo pacman -S git",
+  //             description: "Installation selon votre distribution Linux",
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         id: "configure-git",
+  //         title: "Configuration initiale",
+  //         content: `Avant de commencer, configurez votre identité Git. Ces informations seront attachées à chaque commit.`,
+  //         code: [
+  //           {
+  //             language: "bash",
+  //             code: `# Configurer votre nom
+  // git config --global user.name "Votre Nom"
+
+  // # Configurer votre email
+  // git config --global user.email "votre.email@example.com"
+
+  // # Vérifier la configuration
+  // git config --list`,
+  //             description: "Configuration de base obligatoire",
+  //           },
+  //           {
+  //             language: "bash",
+  //             code: `# Définir l'éditeur par défaut (optionnel)
+  // git config --global core.editor "code --wait"  # VS Code
+  // git config --global core.editor "nano"          # Nano
+  // git config --global core.editor "vim"           # Vim
+
+  // # Activer les couleurs
+  // git config --global color.ui auto
+
+  // # Définir la branche par défaut
+  // git config --global init.defaultBranch main`,
+  //             description: "Configurations optionnelles recommandées",
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
   {
     id: "basics",
     number: 3,
@@ -177,9 +512,9 @@ cd mon-projet
 git init
 
 # Résultat : un dossier .git est créé`,
-            description: "Créer un nouveau dépôt Git"
-          }
-        ]
+            description: "Créer un nouveau dépôt Git",
+          },
+        ],
       },
       {
         id: "git-status",
@@ -193,9 +528,9 @@ git status
 
 # Version courte
 git status -s`,
-            description: "Toujours vérifier l'état avant de commiter"
-          }
-        ]
+            description: "Toujours vérifier l'état avant de commiter",
+          },
+        ],
       },
       {
         id: "git-add",
@@ -215,9 +550,9 @@ git add .
 
 # Ajouter tous les fichiers d'un type
 git add *.js`,
-            description: "Différentes façons d'ajouter des fichiers"
-          }
-        ]
+            description: "Différentes façons d'ajouter des fichiers",
+          },
+        ],
       },
       {
         id: "git-commit",
@@ -245,9 +580,9 @@ git commit -m "Ajoute l'authentification utilisateur
 
 # Ajouter et commiter en une commande
 git commit -am "Corrige le bug de navigation"`,
-            description: "Créer des commits avec des messages clairs"
-          }
-        ]
+            description: "Créer des commits avec des messages clairs",
+          },
+        ],
       },
       {
         id: "git-log",
@@ -267,15 +602,16 @@ git log --oneline --graph --all
 
 # Historique des 5 derniers commits
 git log -5`,
-            description: "Explorer l'historique de votre projet"
-          }
-        ]
-      }
-    ]
+            description: "Explorer l'historique de votre projet",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "branches",
     number: 4,
+    image: BrancheImg,
     title: "Les Branches",
     description: "Créer, naviguer et gérer les branches",
     icon: "GitBranch",
@@ -290,7 +626,7 @@ git log -5`,
 - **Nouvelles fonctionnalités** : Développer sans risque
 - **Corrections de bugs** : Isoler les correctifs
 - **Expérimentation** : Tester des idées
-- **Versions** : Maintenir plusieurs versions`
+- **Versions** : Maintenir plusieurs versions`,
       },
       {
         id: "create-branch",
@@ -314,9 +650,9 @@ git checkout -b ma-branche
 # Méthode moderne (Git 2.23+)
 git switch ma-branche
 git switch -c nouvelle-branche`,
-            description: "Opérations de base sur les branches"
-          }
-        ]
+            description: "Opérations de base sur les branches",
+          },
+        ],
       },
       {
         id: "delete-branch",
@@ -333,15 +669,16 @@ git branch -D ma-branche
 
 # Supprimer une branche distante
 git push origin --delete ma-branche`,
-            description: "Nettoyer les branches inutiles"
-          }
-        ]
-      }
-    ]
+            description: "Nettoyer les branches inutiles",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "merging",
     number: 5,
+    image: conflitImg,
     title: "Fusion et Conflits",
     description: "Fusionner les branches et résoudre les conflits",
     icon: "GitMerge",
@@ -361,9 +698,9 @@ git merge ma-fonctionnalite
 
 # Fusionner avec un message personnalisé
 git merge ma-fonctionnalite -m "Intègre la nouvelle fonctionnalité"`,
-            description: "Processus de fusion standard"
-          }
-        ]
+            description: "Processus de fusion standard",
+          },
+        ],
       },
       {
         id: "resolve-conflicts",
@@ -373,11 +710,7 @@ git merge ma-fonctionnalite -m "Intègre la nouvelle fonctionnalité"`,
 ### Anatomie d'un conflit
 
 \`\`\`
-<<<<<<< HEAD
-Code de votre branche actuelle
-=======
 Code de la branche à fusionner
->>>>>>> ma-branche
 \`\`\`
 
 ### Étapes de résolution
@@ -400,9 +733,9 @@ git commit -m "Résout les conflits de fusion"
 
 # Annuler une fusion en cours
 git merge --abort`,
-            description: "Gérer les conflits de fusion"
-          }
-        ]
+            description: "Gérer les conflits de fusion",
+          },
+        ],
       },
       {
         id: "git-rebase",
@@ -426,11 +759,11 @@ git rebase -i HEAD~3
 # En cas de conflit pendant le rebase
 git rebase --continue  # Après résolution
 git rebase --abort     # Pour annuler`,
-            description: "Utilisation du rebase"
-          }
-        ]
-      }
-    ]
+            description: "Utilisation du rebase",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "github-basics",
@@ -438,6 +771,7 @@ git rebase --abort     # Pour annuler`,
     title: "GitHub : Les Bases",
     description: "Créer un compte et votre premier dépôt distant",
     icon: "Github",
+    image: githubImg,
     sections: [
       {
         id: "create-account",
@@ -454,7 +788,7 @@ git rebase --abort     # Pour annuler`,
 
 - Choisissez un nom d'utilisateur professionnel
 - Ajoutez une photo de profil
-- Complétez votre bio`
+- Complétez votre bio`,
       },
       {
         id: "create-repo",
@@ -479,9 +813,9 @@ git push -u origin main
 
 # Ou cloner un dépôt existant
 git clone https://github.com/username/repo.git`,
-            description: "Connecter votre dépôt local à GitHub"
-          }
-        ]
+            description: "Connecter votre dépôt local à GitHub",
+          },
+        ],
       },
       {
         id: "ssh-setup",
@@ -506,11 +840,11 @@ cat ~/.ssh/id_ed25519.pub
 
 # Tester la connexion
 ssh -T git@github.com`,
-            description: "Configuration SSH pour GitHub"
-          }
-        ]
-      }
-    ]
+            description: "Configuration SSH pour GitHub",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "remote-operations",
@@ -537,9 +871,9 @@ git clone https://github.com/user/repo.git mon-dossier
 
 # Cloner une branche spécifique
 git clone -b develop https://github.com/user/repo.git`,
-            description: "Différentes façons de cloner"
-          }
-        ]
+            description: "Différentes façons de cloner",
+          },
+        ],
       },
       {
         id: "git-push",
@@ -559,9 +893,9 @@ git push --force origin main
 
 # Push de toutes les branches
 git push --all origin`,
-            description: "Envoyer vos modifications"
-          }
-        ]
+            description: "Envoyer vos modifications",
+          },
+        ],
       },
       {
         id: "git-pull",
@@ -580,9 +914,9 @@ git pull --rebase origin main
 git fetch origin
 git log origin/main..main
 git merge origin/main`,
-            description: "Récupérer les mises à jour"
-          }
-        ]
+            description: "Récupérer les mises à jour",
+          },
+        ],
       },
       {
         id: "git-remote",
@@ -602,15 +936,16 @@ git remote set-url origin git@github.com:user/repo.git
 
 # Supprimer un remote
 git remote remove upstream`,
-            description: "Gestion des dépôts distants"
-          }
-        ]
-      }
-    ]
+            description: "Gestion des dépôts distants",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "pull-requests",
     number: 8,
+    image: pullIMg,
     title: "Pull Requests",
     description: "Collaborer avec les Pull Requests",
     icon: "GitPullRequest",
@@ -632,7 +967,7 @@ git remote remove upstream`,
 3. Pousser la branche
 4. Ouvrir une PR
 5. Revue et discussion
-6. Fusionner`
+6. Fusionner`,
       },
       {
         id: "create-pr",
@@ -651,7 +986,7 @@ git remote remove upstream`,
 - Titre clair et descriptif
 - Description détaillée des changements
 - Référencez les issues liées (#123)
-- Ajoutez des captures d'écran si UI`
+- Ajoutez des captures d'écran si UI`,
       },
       {
         id: "review-pr",
@@ -672,14 +1007,15 @@ git checkout nom-branche
 
 # Ou avec GitHub CLI
 gh pr checkout 123`,
-            description: "Tester une PR localement"
-          }
-        ]
-      }
-    ]
+            description: "Tester une PR localement",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "github-actions",
+    image: actionImg,
     number: 9,
     title: "GitHub Actions",
     description: "Automatiser avec CI/CD",
@@ -699,7 +1035,7 @@ gh pr checkout 123`,
 - **Workflow** : Processus automatisé (.yml)
 - **Job** : Ensemble de steps
 - **Step** : Tâche individuelle
-- **Action** : Code réutilisable`
+- **Action** : Code réutilisable`,
       },
       {
         id: "first-workflow",
@@ -736,9 +1072,9 @@ jobs:
         
       - name: Build
         run: npm run build`,
-            description: "Workflow CI basique pour Node.js"
-          }
-        ]
+            description: "Workflow CI basique pour Node.js",
+          },
+        ],
       },
       {
         id: "deploy-workflow",
@@ -775,11 +1111,11 @@ jobs:
         with:
           github_token: \${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist`,
-            description: "Déploiement automatique sur GitHub Pages"
-          }
-        ]
-      }
-    ]
+            description: "Déploiement automatique sur GitHub Pages",
+          },
+        ],
+      },
+    ],
   },
   {
     id: "best-practices",
@@ -811,9 +1147,9 @@ git commit -m "feat(auth): ajoute la connexion Google"
 git commit -m "fix(cart): corrige le calcul du total"
 git commit -m "docs(readme): met à jour les instructions"
 git commit -m "refactor(api): simplifie la gestion des erreurs"`,
-            description: "Exemples de Conventional Commits"
-          }
-        ]
+            description: "Exemples de Conventional Commits",
+          },
+        ],
       },
       {
         id: "gitflow",
@@ -846,9 +1182,9 @@ git checkout main
 git merge hotfix/bug-critique
 git checkout develop
 git merge hotfix/bug-critique`,
-            description: "Workflow Gitflow"
-          }
-        ]
+            description: "Workflow Gitflow",
+          },
+        ],
       },
       {
         id: "gitignore",
@@ -887,9 +1223,9 @@ logs/
 # Cache
 .cache/
 *.cache`,
-            description: "Exemple de .gitignore complet"
-          }
-        ]
+            description: "Exemple de .gitignore complet",
+          },
+        ],
       },
       {
         id: "useful-commands",
@@ -921,10 +1257,10 @@ git clean -fd
 
 # Cherry-pick un commit
 git cherry-pick abc123`,
-            description: "Commandes avancées utiles"
-          }
-        ]
-      }
-    ]
-  }
+            description: "Commandes avancées utiles",
+          },
+        ],
+      },
+    ],
+  },
 ];
